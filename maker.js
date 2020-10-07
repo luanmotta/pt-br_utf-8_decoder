@@ -1,8 +1,10 @@
 const { readFileSync, writeFileSync } = require('fs')
+const path = require('path')
+const invalidChar = '�'
 
-const file = readFileSync('./pt-br_words.txt', { encoding: 'utf-8' })
+const file = readFileSync(path.join(__dirname, './pt-br_words.txt'), { encoding: 'utf-8' })
 
-const array = file.split('\n')
+const array = file.split(/\n|\r/)
 
 const obj = {}
 
@@ -13,7 +15,7 @@ const temAcento = (str) => {
 }
 
 const removeUTF = (str) => {
-  return str.replace(regex, '?')
+  return str.replace(regex, invalidChar)
 }
 
 array.forEach(item => {
@@ -21,4 +23,4 @@ array.forEach(item => {
   obj[removeUTF(item)] = item
 })
 
-writeFileSync('./utf-8.json', JSON.stringify(obj), { encoding: 'utf-8' })
+writeFileSync(path.join(__dirname, './dictionary.json'), JSON.stringify(obj), { encoding: 'utf-8' })
